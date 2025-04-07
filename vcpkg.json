@@ -1,0 +1,7 @@
+{
+  "dependencies": [
+    "nlohmann-json",
+    "json-schema-validator",
+    "gtest"
+  ]
+}
