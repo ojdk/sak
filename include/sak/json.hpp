@@ -1,4 +1,13 @@
+/**
+ * @file json.hpp
+ * @brief JSON wrapper for handling JSON data and operations in the application.
+ * @author Ole Jørgensen
+ * @date 2025-03-31
+ */
+
 #pragma once
+
+#include <sak/sak_api.hpp>
 
 #include <istream>
 #include <memory>
@@ -6,22 +15,21 @@
 
 namespace sak {
 
-class json
-{
+class json {
 public:
-  explicit json( );
-  explicit json( std::istream &&file );
-  explicit json( json const & ) noexcept;
-  explicit json( json && ) noexcept;
-  explicit json( std::string const &json_str ) noexcept;
+  SAK_API explicit json( );
+  SAK_API explicit json( std::istream &&file );
+  SAK_API explicit json( json const & ) noexcept;
+  SAK_API explicit json( json && ) noexcept;
+  SAK_API explicit json( std::string const &json_str ) noexcept;
 
-  ~json( ) noexcept;
+  SAK_API ~json( ) noexcept;
 
-  auto operator=( json const & ) noexcept -> json &;
-  auto operator=( json && ) noexcept -> json &;
+  SAK_API auto operator=( json const & ) noexcept -> json &;
+  SAK_API auto operator=( json && ) noexcept -> json &;
 
 public:
-  auto dump( ) const -> std::string;
+  SAK_API auto dump( ) const -> std::string;
 
 private:
   std::unique_ptr< struct json_impl > m_impl;

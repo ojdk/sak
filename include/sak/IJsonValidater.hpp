@@ -1,3 +1,10 @@
+/**
+ * @file IJsonValidater.hpp
+ * @brief Interface for JSON validation functionality.
+ * @author Ole Jørgensen
+ * @date 2025-03-31
+ */
+
 #pragma once
 
 #include <sak/details.hpp>
@@ -5,8 +12,7 @@
 
 namespace sak {
 
-class IJsonValidater
-{
+class IJsonValidater {
 public:
   virtual ~IJsonValidater( ) = default;
 

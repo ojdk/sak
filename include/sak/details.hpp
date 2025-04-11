@@ -1,10 +1,6 @@
 /**
  * @file details.hpp
- * @brief Internal details for the Rock-Paper-Scissors (RPS) application.
- *
- * This file contains internal implementation details for the RPS application.
- * It is not intended to be included directly by external code.
- *
+ * @brief Internal details on strong types and other details.
  * @author Ole Jørgensen
  * @date 2025-03-31
  */

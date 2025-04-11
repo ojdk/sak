@@ -5,8 +5,7 @@
 #include <sak/json.hpp>
 
 namespace sak {
-class LohmannJsonValidater : public IJsonValidater
-{
+class LohmannJsonValidater : public IJsonValidater {
 
 public:
   LohmannJsonValidater( ) = default;

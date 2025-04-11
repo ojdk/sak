@@ -1,3 +1,11 @@
+/**
+ * @file expected.hpp
+ * @brief Implementation of an expected type for error handling and value
+ * storage.
+ * @author Ole Jørgensen
+ * @date 2025-03-31
+ */
+
 #pragma once
 
 #include <optional>
@@ -6,8 +14,7 @@
 namespace sak {
 
 template < typename T, typename U >
-class expected
-{
+class expected {
 public:
   expected( ) = delete;
 
@@ -92,8 +99,7 @@ private:
 
 template < typename T, typename U >
   requires std::is_void_v< T >
-class expected< T, U >
-{
+class expected< T, U > {
 public:
   expected( )
       : m_has_val( true )
@@ -143,4 +149,5 @@ private:
   U m_err;
   bool m_has_val = false;
 };
+
 } // namespace sak
