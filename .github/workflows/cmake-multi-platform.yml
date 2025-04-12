@@ -33,6 +33,14 @@ jobs:
       # Set up the MSVC environment for Windows builds
     - uses: ilammy/msvc-dev-cmd@v1
 
+    - name: Install vcpkg
+      run: |
+        git clone https://github.com/microsoft/vcpkg.git
+        cd vcpkg
+        ./bootstrap-vcpkg.sh
+      env:
+        VCPKG_ROOT: ${{ github.workspace }}/vcpkg
+
     - name: Cache vcpkg
       id: cache_vcpkg
       # Cache the vcpkg build artifacts to speed up subsequent runs
@@ -45,16 +53,6 @@ jobs:
         key: ${{ runner.os }}-vcpkg-${{ hashFiles('vcpkg.json') }}
         restore-keys: |
           ${{ runner.os }}-vcpkg-
-
-    - name: Install vcpkg
-      if: steps.cache_vcpkg.outputs.cache-hit != 'true'
-      run: |
-        echo "Installing vcpkg...cache-hit '${{steps.cache_vcpkg.outputs.cache-hit}}'"
-        git clone https://github.com/microsoft/vcpkg.git
-        cd vcpkg
-        ./bootstrap-vcpkg.sh
-      env:
-        VCPKG_ROOT: ${{ github.workspace }}/vcpkg
 
     - name: Configure CMake using Presets
       # Configure the project using the specified CMake preset
