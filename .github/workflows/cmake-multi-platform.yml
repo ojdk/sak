@@ -14,6 +14,8 @@ permissions:
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   VCPKG_FEATURE_FLAGS: dependencygraph
+  VCPKG_DOWNLOADS: ${{ github.workspace }}/vcpkg/downloads
+  VCPKG_ROOT: ${{ github.workspace }}/vcpkg
   
 jobs:
   build:
@@ -38,8 +40,6 @@ jobs:
         git clone https://github.com/microsoft/vcpkg.git
         cd vcpkg
         ./bootstrap-vcpkg.sh
-      env:
-        VCPKG_ROOT: ${{ github.workspace }}/vcpkg
 
     - name: Cache vcpkg
       id: cache_vcpkg
