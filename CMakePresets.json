@@ -24,12 +24,9 @@
             "description": "Configure for RelWithDebInfo build using vcpkg and Visual Studio compiler (x64)",
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/out/build/relwithdebinfo",
-            "architecture": {
-                "value": "x64"
-            },
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake",
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/relwithdebinfo",
                 "CMAKE_C_COMPILER": "cl",
                 "CMAKE_CXX_COMPILER": "cl"

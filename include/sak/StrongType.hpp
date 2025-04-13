@@ -15,8 +15,8 @@ template < typename T, typename trait_t >
 class StrongType {
 public:
   explicit StrongType( T value );
-  StrongType( StrongType const &other ) = default;
-  StrongType( StrongType &&other ) = default;
+  explicit StrongType( StrongType const &other ) = default;
+  explicit StrongType( StrongType &&other ) = default;
   auto operator=( StrongType const &other ) -> StrongType & = default;
   auto operator=( StrongType &&other ) -> StrongType & = default;
   auto value( ) const -> T const & { return m_value; }
@@ -26,7 +26,7 @@ private:
   T m_value; // The underlying value of the strong type
 };
 
-// implementation of StrongType constructor
+// implementatio of StrongType constructor
 template < typename T, typename trait_t >
 StrongType< T, trait_t >::StrongType( T value )
     : m_value( value )
