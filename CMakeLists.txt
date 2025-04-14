@@ -63,6 +63,10 @@ install(TARGETS sak_static sak_shared
     RUNTIME DESTINATION bin
 )
 
+# Add compile definitions for shared library
+target_compile_definitions(sak_shared PRIVATE SAK_DYNAMIC)
+target_compile_definitions(sak_shared PRIVATE SAK_EXPORT)
+
 # Install headers
 install(DIRECTORY include/ DESTINATION include)
 
@@ -77,6 +81,7 @@ if(SAK_BUILD_TESTS)
       ${SOURCE_DIR}/src/test_LohmannJsonValidater.cpp
       ${SOURCE_DIR}/src/test_StrongType.cpp
       ${SOURCE_DIR}/src/test_expected.cpp
+      ${SOURCE_DIR}/src/test_index_number.cpp
       ${SOURCES}
   )
 
@@ -91,7 +96,7 @@ if(SAK_BUILD_TESTS)
   )
 
   include(GoogleTest)
-  gtest_discover_tests(sak_tests)
+  gtest_discover_tests(sak_tests)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 
   
 # Add a custom target to run tests after a successful build

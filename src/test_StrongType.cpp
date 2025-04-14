@@ -29,6 +29,13 @@ TEST( StrongTypeTest, MoveConstructor )
   EXPECT_EQ( str2.value( ), "Initial" );
 }
 
+TEST( StrongTypeTest, MoveConstructorWithUniquePtr )
+{
+  StrongString str1( "Initial" );
+  auto str2 = std::make_unique< StrongString >( std::move( str1 ) );
+  EXPECT_EQ( str2->value( ), "Initial" );
+}
+
 TEST( StrongTypeTest, CopyAssignment )
 {
   StrongString str1( "Initial" );
