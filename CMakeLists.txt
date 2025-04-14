@@ -81,7 +81,8 @@ if(SAK_BUILD_TESTS)
       ${SOURCE_DIR}/src/test_LohmannJsonValidater.cpp
       ${SOURCE_DIR}/src/test_StrongType.cpp
       ${SOURCE_DIR}/src/test_expected.cpp
-      ${SOURCE_DIR}/src/test_index_number.cpp
+      ${SOURCE_DIR}/src/test_index.cpp
+      ${SOURCE_DIR}/src/test_number.cpp
       ${SOURCES}
   )
 
