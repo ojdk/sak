@@ -31,16 +31,16 @@ json::json( std::string const &json_str ) noexcept
 
 auto json::operator=( json const &other ) noexcept -> json &
 {
-    if ( this != &other ) {
-      m_impl = std::make_unique< json_impl >( other.dump( ) );
+  if ( this != &other ) {
+    m_impl = std::make_unique< json_impl >( other.dump( ) );
   }
   return *this;
 }
 
 auto json::operator=( json &&other ) noexcept -> json &
 {
-    if ( this != &other ) {
-      m_impl = std::move( other.m_impl );
+  if ( this != &other ) {
+    m_impl = std::move( other.m_impl );
   }
   return *this;
 }

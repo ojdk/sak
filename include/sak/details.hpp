@@ -10,10 +10,18 @@
 #include <sak/StrongType.hpp>
 
 #include <filesystem>
+#include <functional>
 
 namespace sak {
 
 using SchemaPath =
   sak::StrongType< std::filesystem::path, struct SchemaPathTag >;
 
-}
+} // namespace sak
+
+namespace sak {
+
+using task_t = std::function< void( ) >;
+using taskId_t = std::size_t;
+
+} // namespace sak

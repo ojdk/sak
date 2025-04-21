@@ -16,6 +16,7 @@ set(SOURCES
     ${SOURCE_DIR}/src/json.cpp
     ${SOURCE_DIR}/src/json_impl.cpp
     ${SOURCE_DIR}/src/LohmannJsonVAlidater.cpp
+    ${SOURCE_DIR}/src/TaskScheduler.cpp
 )
 
 set(HEADERS
@@ -23,6 +24,8 @@ set(HEADERS
   ${SOURCE_DIR}/include/sak/json.hpp
   ${SOURCE_DIR}/include/sak/IJsonValidater.hpp
   ${SOURCE_DIR}/include/sak/expected.hpp
+  ${SOURCE_DIR}/include/sak/TaskScheduler.hpp
+  ${SOURCE_DIR}/include/sak/ITelemetricDevice.hpp
 )
 
 set(PRIVATE_HEADER_FILES
@@ -64,7 +67,7 @@ install(TARGETS sak_static sak_shared
 )
 
 # Add compile definitions for shared library
-target_compile_definitions(sak_shared PRIVATE SAK_DYNAMIC)
+target_compile_definitions(sak_shared PUBLIC SAK_DYNAMIC)
 target_compile_definitions(sak_shared PRIVATE SAK_EXPORT)
 
 # Install headers
@@ -83,6 +86,7 @@ if(SAK_BUILD_TESTS)
       ${SOURCE_DIR}/src/test_expected.cpp
       ${SOURCE_DIR}/src/test_index.cpp
       ${SOURCE_DIR}/src/test_number.cpp
+      ${SOURCE_DIR}/src/test_TaskScheduler.cpp
       ${SOURCES}
   )
 
