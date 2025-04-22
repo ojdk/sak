@@ -13,10 +13,11 @@ option(SAK_BUILD_TESTS "Build sak tests" ON)
 # Set source and header files
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(SOURCES
-    ${SOURCE_DIR}/src/json.cpp
-    ${SOURCE_DIR}/src/json_impl.cpp
-    ${SOURCE_DIR}/src/LohmannJsonVAlidater.cpp
-    ${SOURCE_DIR}/src/TaskScheduler.cpp
+  ${SOURCE_DIR}/src/json.cpp
+  ${SOURCE_DIR}/src/json_impl.cpp
+  ${SOURCE_DIR}/src/LohmannJsonVAlidater.cpp
+  ${SOURCE_DIR}/src/TaskScheduler.cpp
+  ${SOURCE_DIR}/src/telemetric/TelemetricTimer.cpp
 )
 
 set(HEADERS
@@ -25,7 +26,8 @@ set(HEADERS
   ${SOURCE_DIR}/include/sak/IJsonValidater.hpp
   ${SOURCE_DIR}/include/sak/expected.hpp
   ${SOURCE_DIR}/include/sak/TaskScheduler.hpp
-  ${SOURCE_DIR}/include/sak/ITelemetricDevice.hpp
+  ${SOURCE_DIR}/include/sak/telemetric/ITelemetricDevice.hpp
+  ${SOURCE_DIR}/include/sak/telemetric/TelemetricTimer.hpp
 )
 
 set(PRIVATE_HEADER_FILES
@@ -87,6 +89,7 @@ if(SAK_BUILD_TESTS)
       ${SOURCE_DIR}/src/test_index.cpp
       ${SOURCE_DIR}/src/test_number.cpp
       ${SOURCE_DIR}/src/test_TaskScheduler.cpp
+      ${SOURCE_DIR}/src/telemetric/test_TimedTelemetricDevice.cpp
       ${SOURCES}
   )
 

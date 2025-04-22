@@ -3,22 +3,18 @@
 #include <sak/TaskScheduler.hpp>
 
 struct mockTelemetricDevice : public sak::ITelemetricDevice {
-  void startTelemetry( ) override { /* Mock implementation */ }
-  void stopTelemetry( ) override { /* Mock implementation */ }
-  bool isTelemetryActive( ) const override
-  {
-    return false;
-  } // Mock implementation
+
+  auto IsEnabled( ) const -> bool override { return true; }
 };
 
 struct TaskSchedulerTest : public ::testing::Test {
   TaskSchedulerTest( )
-      : m_telemetric_device( std::make_unique< mockTelemetricDevice >( ) )
-      , scheduler( std::move( m_telemetric_device ) )
+      : m_telemetric_device{ }
+      , scheduler( m_telemetric_device )
   {
   }
 
-  sak::ITelemetricDevice::uptr m_telemetric_device;
+  mockTelemetricDevice m_telemetric_device;
   sak::TaskScheduler scheduler;
 };
 

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <sak/ITelemetricDevice.hpp>
 #include <sak/details.hpp>
+#include <sak/telemetric/ITelemetricDevice.hpp>
 
 #include <memory>
 
@@ -16,7 +16,7 @@ enum class scheduler_error : unsigned short {
 
 class TaskScheduler {
 public:
-  TaskScheduler( sak::ITelemetricDevice::uptr &&telemetric_controller );
+  TaskScheduler( sak::ITelemetricDevice &telemetric_controller );
   TaskScheduler( TaskScheduler const & ) = delete;
   TaskScheduler( TaskScheduler && ) = delete;
   TaskScheduler &operator=( TaskScheduler const & ) = delete;

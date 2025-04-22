@@ -9,6 +9,7 @@
 
 #include <sak/StrongType.hpp>
 
+#include <chrono>
 #include <filesystem>
 #include <functional>
 
@@ -23,5 +24,7 @@ namespace sak {
 
 using task_t = std::function< void( ) >;
 using taskId_t = std::size_t;
+
+using duration = std::chrono::milliseconds;
 
 } // namespace sak

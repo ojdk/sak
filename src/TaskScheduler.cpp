@@ -16,8 +16,8 @@ using task_expected = sak::expected< task_data, sak::scheduler_error >;
 
 struct TaskSchedulerImpl {
 
-  TaskSchedulerImpl( sak::ITelemetricDevice::uptr &&telemetric_device )
-      : m_telemetric_device( std::move( telemetric_device ) )
+  TaskSchedulerImpl( sak::ITelemetricDevice &telemetric_device )
+      : m_telemetric_device( telemetric_device )
   {
   }
 
@@ -46,7 +46,6 @@ struct TaskSchedulerImpl {
 
   void _execute_task_safely( task_data const &data )
   {
-    m_telemetric_device->startTelemetry( );
     try {
       data.m_task( );
     } catch ( std::exception const &e ) {
@@ -56,7 +55,6 @@ struct TaskSchedulerImpl {
       // @todo : log error with upcoming logging framework
       std::cerr << "Unknown error executing task" << std::endl;
     }
-    m_telemetric_device->stopTelemetry( );
   }
 
   auto _get_taskData( ) noexcept -> task_expected
@@ -85,12 +83,11 @@ struct TaskSchedulerImpl {
 
   std::mutex m_mutex;
   std::list< task_data > m_tasks;
-  sak::ITelemetricDevice::uptr m_telemetric_device;
+  sak::ITelemetricDevice &m_telemetric_device;
 };
 
-TaskScheduler::TaskScheduler( sak::ITelemetricDevice::uptr &&telemetric_device )
-    : m_impl{ std::make_unique< TaskSchedulerImpl >(
-        std::move( telemetric_device ) ) }
+TaskScheduler::TaskScheduler( sak::ITelemetricDevice &telemetric_device )
+    : m_impl{ std::make_unique< TaskSchedulerImpl >( telemetric_device ) }
 {
 }
 
