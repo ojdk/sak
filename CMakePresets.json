@@ -15,7 +15,9 @@
                 "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/debug",
                 "CMAKE_C_COMPILER": "cl",
-                "CMAKE_CXX_COMPILER": "cl"
+                "CMAKE_CXX_COMPILER": "cl",
+                "CMAKE_CXX_FLAGS": "-DWINDOWS /EHsc /utf-8 /W3",
+                "CMAKE_C_FLAGS": "-DWINDOWS"
             }
         },
         {
@@ -24,12 +26,17 @@
             "description": "Configure for RelWithDebInfo build using vcpkg and Visual Studio compiler (x64)",
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/out/build/relwithdebinfo",
+            "architecture": {
+                "value": "x64"
+            },
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "RelWithDebInfo",
                 "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake",
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/relwithdebinfo",
                 "CMAKE_C_COMPILER": "cl",
-                "CMAKE_CXX_COMPILER": "cl"
+                "CMAKE_CXX_COMPILER": "cl",
+                "CMAKE_C_FLAGS": "-DWINDOWS",
+                "CMAKE_CXX_FLAGS": "-DWINDOWS"
             }
         }
     ],

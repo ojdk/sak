@@ -3,11 +3,12 @@
 #include <sak/StrongType.hpp>
 #include <sak/details.hpp>
 
+#include <chrono>
 #include <string_view>
 
 namespace sak {
 
-using TelemetricId = sak::StrongType< unsigned, struct TelemetricIdTag >;
+using TelemetricId = sak::StrongType< uint64_t, struct TelemetricIdTag >;
 using TelemetricIdentifier =
   sak::StrongType< std::string, struct TelemetricIdentifierTag >;
 
@@ -33,6 +34,9 @@ public:
 
 public:
   virtual auto IsEnabled( ) const -> bool = 0;
+  virtual void ReportExecutionTimeViolation(
+    sak::TelemetricInfo const &info,
+    std::chrono::high_resolution_clock::duration const &duration ) = 0;
 };
 
 } // namespace sak

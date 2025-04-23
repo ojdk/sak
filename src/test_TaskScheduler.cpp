@@ -5,6 +5,12 @@
 struct mockTelemetricDevice : public sak::ITelemetricDevice {
 
   auto IsEnabled( ) const -> bool override { return true; }
+  void ReportExecutionTimeViolation(
+    sak::TelemetricInfo const &info,
+    std::chrono::high_resolution_clock::duration const &duration ) override
+  {
+    // Mock implementation, do nothing
+  }
 };
 
 struct TaskSchedulerTest : public ::testing::Test {
