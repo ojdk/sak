@@ -1,17 +1,8 @@
 #include <gtest/gtest.h>
 
+#include "telemetric/test_mock_TelemetricDevice.hpp"
+
 #include <sak/TaskScheduler.hpp>
-
-struct mockTelemetricDevice : public sak::ITelemetricDevice {
-
-  auto IsEnabled( ) const -> bool override { return true; }
-  void ReportExecutionTimeViolation(
-    sak::TelemetricInfo const &info,
-    std::chrono::high_resolution_clock::duration const &duration ) override
-  {
-    // Mock implementation, do nothing
-  }
-};
 
 struct TaskSchedulerTest : public ::testing::Test {
   TaskSchedulerTest( )
@@ -20,7 +11,7 @@ struct TaskSchedulerTest : public ::testing::Test {
   {
   }
 
-  mockTelemetricDevice m_telemetric_device;
+  sak::test::mock_EnabledTelemetricDevice m_telemetric_device;
   sak::TaskScheduler scheduler;
 };
 

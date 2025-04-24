@@ -13,16 +13,16 @@ using TelemetricIdentifier =
   sak::StrongType< std::string, struct TelemetricIdentifierTag >;
 
 struct TelemetricInfo {
-  TelemetricInfo( TelemetricId const &id,
-                  TelemetricIdentifier const &identifier )
+  TelemetricInfo( sak::TelemetricId const &id,
+                  sak::TelemetricIdentifier const &identifier )
       : id( id )
       , identifier( identifier )
   {
   }
-  TelemetricInfo( TelemetricInfo const & ) = default;
-  TelemetricInfo( TelemetricInfo && ) = default;
-  TelemetricInfo &operator=( TelemetricInfo const & ) = default;
-  TelemetricInfo &operator=( TelemetricInfo && ) = default;
+  TelemetricInfo( sak::TelemetricInfo const & ) = default;
+  TelemetricInfo( sak::TelemetricInfo && ) = default;
+  sak::TelemetricInfo &operator=( sak::TelemetricInfo const & ) = default;
+  sak::TelemetricInfo &operator=( sak::TelemetricInfo && ) = default;
   ~TelemetricInfo( ) = default;
   sak::TelemetricId id;
   sak::TelemetricIdentifier identifier;
@@ -37,6 +37,8 @@ public:
   virtual void ReportExecutionTimeViolation(
     sak::TelemetricInfo const &info,
     std::chrono::high_resolution_clock::duration const &duration ) = 0;
+
+  virtual auto GetTelemetricId( ) const -> sak::TelemetricId = 0;
 };
 
 } // namespace sak

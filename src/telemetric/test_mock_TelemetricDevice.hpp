@@ -18,7 +18,13 @@ struct mock_base_TelemetricDevice : public sak::ITelemetricDevice {
                    info.identifier.value( ) );
   }
 
+  inline auto GetTelemetricId( ) const -> sak::TelemetricId override
+  {
+    return sak::TelemetricId{ ++m_id };
+  }
+
   std::string report;
+  mutable uint64_t m_id{ 0 };
 };
 
 struct mock_EnabledTelemetricDevice : public mock_base_TelemetricDevice {

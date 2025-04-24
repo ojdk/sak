@@ -1,5 +1,6 @@
 #include <sak/TaskScheduler.hpp>
 #include <sak/expected.hpp>
+#include <sak/telemetric/TelemetricExecutionTimeLimit.hpp>
 
 #include <iostream>
 #include <list>
@@ -17,7 +18,10 @@ using task_expected = sak::expected< task_data, sak::scheduler_error >;
 struct TaskSchedulerImpl {
 
   TaskSchedulerImpl( sak::ITelemetricDevice &telemetric_device )
-      : m_telemetric_device( telemetric_device )
+      : m_telemetric_device{ telemetric_device }
+      , m_telemetric_info{ m_telemetric_device.GetTelemetricId( ),
+                           sak::TelemetricIdentifier{ "TaskScheduler" } }
+      , m_duration{ std::chrono::milliseconds{ 80 } }
   {
   }
 
@@ -47,7 +51,8 @@ struct TaskSchedulerImpl {
   void _execute_task_safely( task_data const &data )
   {
     try {
-      data.m_task( );
+      sak::TelemetricExecutionTimeLimit( m_telemetric_info, m_duration,
+                                         m_telemetric_device, data.m_task );
     } catch ( std::exception const &e ) {
       // @todo : log error with upcoming logging framework
       std::cerr << "Error executing task: " << e.what( ) << std::endl;
@@ -84,6 +89,9 @@ struct TaskSchedulerImpl {
   std::mutex m_mutex;
   std::list< task_data > m_tasks;
   sak::ITelemetricDevice &m_telemetric_device;
+  sak::TelemetricInfo m_telemetric_info;
+
+  std::chrono::milliseconds m_duration;
 };
 
 TaskScheduler::TaskScheduler( sak::ITelemetricDevice &telemetric_device )
