@@ -18,16 +18,22 @@ set(SOURCES
   ${SOURCE_DIR}/src/LohmannJsonVAlidater.cpp
   ${SOURCE_DIR}/src/TaskScheduler.cpp
   ${SOURCE_DIR}/src/telemetric/TelemetricExecutionTimeLimit.cpp
-)
+  
+  
+  ${SOURCE_DIR}/vcpkg.json
+  )
 
 set(HEADERS
   ${SOURCE_DIR}/include/sak/details.hpp
   ${SOURCE_DIR}/include/sak/json.hpp
   ${SOURCE_DIR}/include/sak/IJsonValidater.hpp
   ${SOURCE_DIR}/include/sak/expected.hpp
+  ${SOURCE_DIR}/include/sak/sak_api.hpp
   ${SOURCE_DIR}/include/sak/TaskScheduler.hpp
   ${SOURCE_DIR}/include/sak/telemetric/ITelemetricDevice.hpp
   ${SOURCE_DIR}/include/sak/telemetric/TelemetricExecutionTimeLimit.hpp
+  ${SOURCE_DIR}/include/sak/logging/ILogSink.hpp
+  ${SOURCE_DIR}/include/sak/logging/LogContextData.hpp
 )
 
 set(PRIVATE_HEADER_FILES
