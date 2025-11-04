@@ -31,10 +31,12 @@ sak::json_iterator &sak::json_iterator::operator++( )
   return *this;
 }
 
-sak::json_ref sak::json_iterator::operator*( )
+sak::json_ref &sak::json_iterator::operator*( )
 {
-  return sak::json_ref{
-    std::make_unique< sak::json_ref_impl >( *( m_impl->cur ) ) };
+  return m_impl->cur_ref;
+
+  // return sak::json_ref{
+  //   std::make_unique< sak::json_ref_impl >( *( m_impl->cur ) ) };
 }
 
 //! const_json_iterator class implementation
@@ -209,6 +211,17 @@ json_ref::json_ref( json_ref const &other )
 }
 
 json_ref::~json_ref( ) = default;
+
+auto json_ref::operator=( sak::json_ref const &other ) -> sak::json_ref &
+{
+  if ( this != &other ) {
+    if ( other.m_impl )
+      m_impl = std::make_unique< sak::json_ref_impl >( other.m_impl->m_json );
+    else
+      m_impl = nullptr;
+  }
+  return *this;
+}
 
 auto json_ref::getString( std::string const property_name ) const
   -> sak::expected< std::string, sak::json::error >

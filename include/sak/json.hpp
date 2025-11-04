@@ -83,6 +83,8 @@ public:
   json_ref( json_ref const &other );
   ~json_ref( );
 
+  auto operator=( sak::json_ref const &other ) -> sak::json_ref &;
+
 public:
   SAK_API
   auto getString( std::string const property_name ) const
@@ -128,7 +130,7 @@ struct json_iterator {
 
   SAK_API bool operator!=( const sak::json_iterator &other ) const;
   SAK_API sak::json_iterator &operator++( );
-  SAK_API sak::json_ref operator*( );
+  SAK_API sak::json_ref & operator*( );
 
 private:
   std::unique_ptr< sak::json_iterator_impl > m_impl;

@@ -50,10 +50,15 @@ struct json_impl {
 //! JSON iterator implementation
 
 struct json_iterator_impl {
+
+  explicit json_iterator_impl( nlohmann::json::iterator c,
+                               nlohmann::json::iterator e );
   void increment( );
 
   nlohmann::json::iterator cur;
   nlohmann::json::iterator end;
+
+  sak::json_ref cur_ref;
 };
 
 struct json_ref_impl {

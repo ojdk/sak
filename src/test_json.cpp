@@ -85,7 +85,7 @@ TEST( sak_json, json_getString_simple )
 TEST( sak_json, json_getString_unkown_property )
 {
   sak::json json{ R"({"key":"value"})"s };
-  EXPECT_EQ( json.getString( "not exsisting property" ).error( ),
+  EXPECT_EQ( json.getString( "not existing property" ).error( ),
              sak::json::error::unknown_property );
 }
 
@@ -106,7 +106,7 @@ TEST( sak_json, json_getNumber_simple )
 TEST( sak_json, json_getNumber_unkown_property )
 {
   sak::json json{ R"({"key":"value"})"s };
-  EXPECT_EQ( json.getNumber( "not exsisting property" ).error( ),
+  EXPECT_EQ( json.getNumber( "not existing property" ).error( ),
              sak::json::error::unknown_property );
 }
 
@@ -128,7 +128,7 @@ TEST( sak_json, json_getInteger_unkown_property )
 {
   sak::json json{ R"({"key":"value"})"s };
 
-  EXPECT_EQ( json.getInteger( "not exsisting property"s ).error( ),
+  EXPECT_EQ( json.getInteger( "not existing property"s ).error( ),
              sak::json::error::unknown_property );
 }
 
@@ -163,7 +163,7 @@ TEST( sak_json, json_iterate_array_obj )
 
   std::vector< std::string > val{ "a"s, "b"s };
 
-  for ( auto item : json ) {
+  for ( auto & item : json ) {
     EXPECT_EQ( item.getObject( ).value( ).getString( "name" ).value( ),
                val[ i++ ] );
   }

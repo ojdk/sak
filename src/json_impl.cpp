@@ -178,11 +178,24 @@ auto json_impl::getInteger( ) const
 }
 
 //!
+json_iterator_impl::json_iterator_impl( nlohmann::json::iterator c,
+                                        nlohmann::json::iterator e )
+    : cur( c )
+    , end( e )
+    , cur_ref( cur == end ? nullptr
+                          : std::make_unique< sak::json_ref_impl >( *cur ) )
+{
+}
 
 void json_iterator_impl::increment( )
 {
   if ( cur != end ) {
     ++cur;
+    if ( cur == end )
+      cur_ref =
+        sak::json_ref( std::unique_ptr< sak::json_ref_impl >( nullptr ) );
+    else
+      cur_ref = sak::json_ref( std::make_unique< sak::json_ref_impl >( *cur ) );
   }
 }
 
