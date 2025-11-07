@@ -23,6 +23,7 @@ set(HEADERS
   ${SOURCE_DIR}/include/sak/json.hpp
   ${SOURCE_DIR}/include/sak/IJsonValidater.hpp
   ${SOURCE_DIR}/include/sak/expected.hpp
+  ${SOURCE_DIR}/include/sak/signal.hpp
 )
 
 set(PRIVATE_HEADER_FILES
@@ -83,6 +84,7 @@ if(SAK_BUILD_TESTS)
       ${SOURCE_DIR}/src/test_expected.cpp
       ${SOURCE_DIR}/src/test_index.cpp
       ${SOURCE_DIR}/src/test_number.cpp
+      ${SOURCE_DIR}/src/test_signal.cpp
       ${SOURCES}
   )
 
