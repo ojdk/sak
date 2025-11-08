@@ -13,16 +13,27 @@ option(SAK_BUILD_TESTS "Build sak tests" ON)
 # Set source and header files
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(SOURCES
-    ${SOURCE_DIR}/src/json.cpp
-    ${SOURCE_DIR}/src/json_impl.cpp
-    ${SOURCE_DIR}/src/LohmannJsonVAlidater.cpp
-)
+  ${SOURCE_DIR}/src/json.cpp
+  ${SOURCE_DIR}/src/json_impl.cpp
+  ${SOURCE_DIR}/src/LohmannJsonVAlidater.cpp
+  ${SOURCE_DIR}/src/TaskScheduler.cpp
+  ${SOURCE_DIR}/src/telemetric/TelemetricExecutionTimeLimit.cpp
+  
+  
+  ${SOURCE_DIR}/vcpkg.json
+  )
 
 set(HEADERS
   ${SOURCE_DIR}/include/sak/details.hpp
   ${SOURCE_DIR}/include/sak/json.hpp
   ${SOURCE_DIR}/include/sak/IJsonValidater.hpp
   ${SOURCE_DIR}/include/sak/expected.hpp
+  ${SOURCE_DIR}/include/sak/sak_api.hpp
+  ${SOURCE_DIR}/include/sak/TaskScheduler.hpp
+  ${SOURCE_DIR}/include/sak/telemetric/ITelemetricDevice.hpp
+  ${SOURCE_DIR}/include/sak/telemetric/TelemetricExecutionTimeLimit.hpp
+  ${SOURCE_DIR}/include/sak/logging/ILogSink.hpp
+  ${SOURCE_DIR}/include/sak/logging/LogContextData.hpp
 )
 
 set(PRIVATE_HEADER_FILES
@@ -64,7 +75,7 @@ install(TARGETS sak_static sak_shared
 )
 
 # Add compile definitions for shared library
-target_compile_definitions(sak_shared PRIVATE SAK_DYNAMIC)
+target_compile_definitions(sak_shared PUBLIC SAK_DYNAMIC)
 target_compile_definitions(sak_shared PRIVATE SAK_EXPORT)
 
 # Install headers
@@ -83,6 +94,9 @@ if(SAK_BUILD_TESTS)
       ${SOURCE_DIR}/src/test_expected.cpp
       ${SOURCE_DIR}/src/test_index.cpp
       ${SOURCE_DIR}/src/test_number.cpp
+      ${SOURCE_DIR}/src/test_TaskScheduler.cpp
+      ${SOURCE_DIR}/src/telemetric/test_TelemetricExecutionTimeLimit.cpp
+      ${SOURCE_DIR}/src/telemetric/test_mock_TelemetricDevice.hpp
       ${SOURCES}
   )
 

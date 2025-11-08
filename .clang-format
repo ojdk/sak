@@ -96,7 +96,7 @@ BraceWrapping:
   BeforeElse:      false
   BeforeLambdaBody: false
   BeforeWhile:     false
-  IndentBraces:    true
+  IndentBraces:    false
   SplitEmptyFunction: true
   SplitEmptyRecord: true
   SplitEmptyNamespace: true
