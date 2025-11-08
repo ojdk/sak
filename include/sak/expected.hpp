@@ -10,6 +10,7 @@
 
 #include <optional>
 #include <type_traits>
+#include <stdexcept>
 
 namespace sak {
 
@@ -57,34 +58,36 @@ public:
   expected &operator=( const expected & ) = delete;
   expected &operator=( expected && ) = delete;
 
+  operator bool( ) const { return m_has_val; }
+
   T &value( )
   {
-      if ( !m_has_val ) {
-        throw std::runtime_error( "No value" );
+    if ( !m_has_val ) {
+      throw std::runtime_error( "No value" );
     }
     return m_val.value( );
   }
 
   const T &value( ) const
   {
-      if ( !m_has_val ) {
-        throw std::runtime_error( "No value" );
+    if ( !m_has_val ) {
+      throw std::runtime_error( "No value" );
     }
     return m_val.value( );
   }
 
   U &error( )
   {
-      if ( m_has_val ) {
-        throw std::runtime_error( "No error" );
+    if ( m_has_val ) {
+      throw std::runtime_error( "No error" );
     }
     return m_err;
   }
 
   const U &error( ) const
   {
-      if ( m_has_val ) {
-        throw std::runtime_error( "No error" );
+    if ( m_has_val ) {
+      throw std::runtime_error( "No error" );
     }
     return m_err;
   }
@@ -127,18 +130,20 @@ public:
   {
   }
 
+  operator bool( ) const { return m_has_val; }
+
   U &error( )
   {
-      if ( m_has_val ) {
-        throw std::runtime_error( "No error" );
+    if ( m_has_val ) {
+      throw std::runtime_error( "No error" );
     }
     return m_err;
   }
 
   const U &error( ) const
   {
-      if ( m_has_val ) {
-        throw std::runtime_error( "No error" );
+    if ( m_has_val ) {
+      throw std::runtime_error( "No error" );
     }
     return m_err;
   }

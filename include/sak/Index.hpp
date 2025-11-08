@@ -50,8 +50,8 @@ public:
     requires std::integral< oT > && std::same_as< T, oT >
   operator Number< oT >( ) const
   {
-      if ( !valid( ) ) {
-        return Number< oT >( 0 );
+    if ( !valid( ) ) {
+      return Number< oT >( 0 );
     }
     return Number< oT >( m_value + 1 );
   }
@@ -64,15 +64,7 @@ public:
   auto idx( ) const -> T const &;
   auto valid( ) const -> bool;
 
-  // private:
-  //   template < typename ot >
-  //     requires std::integral< ot > && std::same_as< T, ot >
-  //   Index( Number< ot > &&other ) = delete;
-  //   template < typename ot >
-  //     requires std::integral< ot > && std::same_as< T, ot >
-  //   auto operator=( Number< ot > &&other ) -> Index< T > & = delete;
-
-private:
+ private:
   void _validate( ) const;
 
 private:
@@ -109,8 +101,8 @@ public:
     requires std::integral< oT > && std::same_as< T, oT >
   operator Index< oT >( ) const
   {
-      if ( !valid( ) ) {
-        return Index< oT >( std::numeric_limits< T >::max( ) );
+    if ( !valid( ) ) {
+      return Index< oT >( std::numeric_limits< T >::max( ) );
     }
     return Index< oT >( m_value - 1 );
   }
@@ -182,8 +174,8 @@ template < typename T >
   requires std::integral< T >
 void Index< T >::_validate( ) const
 {
-    if ( !valid( ) ) {
-      throw std::out_of_range( "Index out of range" );
+  if ( !valid( ) ) {
+    throw std::out_of_range( "Index out of range" );
   }
 }
 
@@ -240,8 +232,8 @@ template < typename T >
   requires std::integral< T >
 auto Number< T >::_validate( ) const
 {
-    if ( !valid( ) ) {
-      throw std::out_of_range( "Number out of range" );
+  if ( !valid( ) ) {
+    throw std::out_of_range( "Number out of range" );
   }
 }
 

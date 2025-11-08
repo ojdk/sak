@@ -2,6 +2,15 @@
   "dependencies": [
     "nlohmann-json",
     "json-schema-validator",
-    "gtest"
+    {
+      "name": "gtest"
+    }
+  ],
+  "builtin-baseline": "62efe42f53b1886a20cbeb22ee9a27736d20f149",
+  "overrides": [
+    {
+      "name": "gtest",
+      "version": "1.17.0"
+    }
   ]
 }

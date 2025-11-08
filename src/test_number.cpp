@@ -143,6 +143,5 @@ TEST( sak_number, number_index_convert )
   EXPECT_EQ( num_function( number ), 4 );
 
   EXPECT_EQ( num_function( IntNumber{ 1 } ), 0 );
-  EXPECT_ANY_THROW(
-    num_function( IntNumber{ 0} ) );
+  EXPECT_ANY_THROW( num_function( IntNumber{ 0 } ) );
 }

@@ -1,51 +1,55 @@
 {
-  "version": 8,
-  "configurePresets": [
-    {
-      "name": "debug",
-      "displayName": "Debug Configuration",
-      "description": "Configure for Debug build using vcpkg and Visual Studio compiler (x64)",
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/out/build/debug",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/debug",
-        "CMAKE_C_COMPILER": "cl",
-        "CMAKE_CXX_COMPILER": "cl"
-      }
-    },
-    {
-      "name": "relwithdebinfo",
-      "displayName": "RelWithDebInfo Configuration",
-      "description": "Configure for RelWithDebInfo build using vcpkg and Visual Studio compiler (x64)",
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/out/build/relwithdebinfo",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake",
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/relwithdebinfo",
-        "CMAKE_C_COMPILER": "cl",
-        "CMAKE_CXX_COMPILER": "cl"
-      }
-    }
-  ],
-  "buildPresets": [
-    {
-      "name": "debug",
-      "configurePreset": "debug",
-      "description": "Build Debug configuration",
-      "targets": [
-        "all"
-      ]
-    },
-    {
-      "name": "relwithdebinfo",
-      "configurePreset": "relwithdebinfo",
-      "description": "Build RelWithDebInfo configuration",
-      "targets": [
-        "all"
-      ]
-    }
-  ]
+    "version": 8,
+    "configurePresets": [
+        {
+            "name": "debug",
+            "displayName": "Debug Configuration",
+            "description": "Configure for Debug build using vcpkg and Visual Studio compiler (x64)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/out/build/debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/debug",
+                "CMAKE_C_COMPILER": "cl",
+                "CMAKE_CXX_COMPILER": "cl",
+                "CMAKE_CXX_FLAGS": "-DWINDOWS /EHsc /utf-8 /W3",
+                "CMAKE_C_FLAGS": "-DWINDOWS"
+            }
+        },
+        {
+            "name": "relwithdebinfo",
+            "displayName": "RelWithDebInfo Configuration",
+            "description": "Configure for RelWithDebInfo build using vcpkg and Visual Studio compiler (x64)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/out/build/relwithdebinfo",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/relwithdebinfo",
+                "CMAKE_C_COMPILER": "cl",
+                "CMAKE_CXX_COMPILER": "cl",
+                "CMAKE_C_FLAGS": "-DWINDOWS",
+                "CMAKE_CXX_FLAGS": "-DWINDOWS"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "debug",
+            "configurePreset": "debug",
+            "description": "Build Debug configuration",
+            "targets": [
+                "all"
+            ]
+        },
+        {
+            "name": "relwithdebinfo",
+            "configurePreset": "relwithdebinfo",
+            "description": "Build RelWithDebInfo configuration",
+            "targets": [
+                "all"
+            ]
+        }
+    ]
 }
