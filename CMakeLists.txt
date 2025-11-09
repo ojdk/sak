@@ -28,6 +28,7 @@ set(HEADERS
   ${SOURCE_DIR}/include/sak/json.hpp
   ${SOURCE_DIR}/include/sak/IJsonValidater.hpp
   ${SOURCE_DIR}/include/sak/expected.hpp
+  ${SOURCE_DIR}/include/sak/signal.hpp
   ${SOURCE_DIR}/include/sak/sak_api.hpp
   ${SOURCE_DIR}/include/sak/TaskScheduler.hpp
   ${SOURCE_DIR}/include/sak/telemetric/ITelemetricDevice.hpp
@@ -94,6 +95,7 @@ if(SAK_BUILD_TESTS)
       ${SOURCE_DIR}/src/test_expected.cpp
       ${SOURCE_DIR}/src/test_index.cpp
       ${SOURCE_DIR}/src/test_number.cpp
+      ${SOURCE_DIR}/src/test_signal.cpp
       ${SOURCE_DIR}/src/test_TaskScheduler.cpp
       ${SOURCE_DIR}/src/telemetric/test_TelemetricExecutionTimeLimit.cpp
       ${SOURCE_DIR}/src/telemetric/test_mock_TelemetricDevice.hpp
