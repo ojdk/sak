@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <sak/json.hpp>
+#include <sak/json/json.hpp>
 
 #include <string>
 

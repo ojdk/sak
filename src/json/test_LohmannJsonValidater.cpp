@@ -2,11 +2,12 @@
 
 #include "LohmannJsonValidater.hpp"
 
-#include <sak/json.hpp>
+#include <sak/json/json.hpp>
 
 #include <filesystem>
 #include <iostream>
 #include <source_location>
+
 namespace sak {
 
 struct LohmnannJsonValidaterTest : public ::testing::Test {
@@ -15,7 +16,7 @@ struct LohmnannJsonValidaterTest : public ::testing::Test {
           std::filesystem::path( std::source_location::current( ).file_name( ) )
             .parent_path( )
             .parent_path( ) /
-          "schemas" / "test" }
+          "../schemas" / "test" }
 
   {
     EXPECT_TRUE( std::filesystem::exists( schema_root_path ) )

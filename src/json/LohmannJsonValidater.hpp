@@ -1,8 +1,8 @@
 #pragma once
 
-#include <sak/IJsonValidater.hpp>
 #include <sak/details.hpp>
-#include <sak/json.hpp>
+#include <sak/json/IJsonValidater.hpp>
+#include <sak/json/json.hpp>
 
 namespace sak {
 class LohmannJsonValidater : public IJsonValidater {

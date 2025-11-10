@@ -34,10 +34,16 @@ protected:
 public:
   void RegisterReceiver( Receiver *receiver );
   void UnRegisterReceiver( Receiver *receiver );
-  void NotifyReceivers( Signal< Tag,async_support, data... >::event const &data );
+  void
+  NotifyReceivers( Signal< Tag, async_support, data... >::event const &data );
+
+  template < bool async_t = async_support >
+  std::enable_if_t< async_t, void > ScheduleNotifyReceivers(
+    Signal< Tag, async_support, data... >::event const &data );
 
 private:
-  void _notify_receiver( Signal< Tag, async_support, data... >::event const &data );
+  void
+  _notify_receiver( Signal< Tag, async_support, data... >::event const &data );
 
 private:
   std::set< Receiver * > receivers_;
@@ -52,26 +58,36 @@ namespace sak {
 template < typename Tag, bool async_support, typename... data >
 Signal< Tag, async_support, data... >::~Signal( )
 {
-    for ( auto it = receivers_.begin( ); it != receivers_.end( ); ) {
-      ( *it )->SetSignalHandler( nullptr );
-      it = receivers_.erase( it );
-    }
+  for ( auto it = receivers_.begin( ); it != receivers_.end( ); ) {
+    ( *it )->SetSignalHandler( nullptr );
+    it = receivers_.erase( it );
+  }
 }
 
 template < typename Tag, bool async_support, typename... data >
-void Signal< Tag, async_support, data... >::RegisterReceiver( Receiver *receiver )
+void Signal< Tag, async_support, data... >::RegisterReceiver(
+  Receiver *receiver )
 {
   receivers_.insert( receiver );
   receiver->SetSignalHandler( this );
 }
 
 template < typename Tag, bool async_support, typename... data >
-void Signal< Tag, async_support, data... >::UnRegisterReceiver( Receiver *receiver )
+void Signal< Tag, async_support, data... >::UnRegisterReceiver(
+  Receiver *receiver )
 {
   auto it = receivers_.find( receiver );
-    if ( it != receivers_.end( ) ) {
-      receivers_.erase( it );
+  if ( it != receivers_.end( ) ) {
+    receivers_.erase( it );
   }
+}
+
+template < typename Tag, bool async_support, typename... data >
+template < bool async_t >
+std::enable_if_t< async_t, void >
+Signal< Tag, async_support, data... >::ScheduleNotifyReceivers(
+  Signal< Tag, async_support, data... >::event const &data )
+{
 }
 
 template < typename Tag, bool async_support, typename... data >
@@ -81,11 +97,12 @@ void Signal< Tag, async_support, data... >::NotifyReceivers( event const &data )
 }
 
 template < typename Tag, bool async_support, typename... data >
-void Signal< Tag, async_support, data... >::_notify_receiver( event const &data )
+void Signal< Tag, async_support, data... >::_notify_receiver(
+  event const &data )
 {
-    for ( auto *receiver : receivers_ ) {
-      receiver->OnSignalReceived( data );
-    }
+  for ( auto *receiver : receivers_ ) {
+    receiver->OnSignalReceived( data );
+  }
 }
 
 // Receiver implementation

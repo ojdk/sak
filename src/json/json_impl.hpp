@@ -1,7 +1,7 @@
 #pragma once
 
 #include <sak/expected.hpp>
-#include <sak/json.hpp>
+#include <sak/json/json.hpp>
 
 #include <nlohmann/json.hpp>
 

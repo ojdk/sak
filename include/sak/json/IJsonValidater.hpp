@@ -8,7 +8,7 @@
 #pragma once
 
 #include <sak/details.hpp>
-#include <sak/json.hpp>
+#include <sak/json/json.hpp>
 
 namespace sak {
 

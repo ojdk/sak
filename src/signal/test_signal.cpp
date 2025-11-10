@@ -1,13 +1,13 @@
 #include <gtest/gtest.h>
 
-#include <sak/Signal.hpp>
+#include <sak/signal/Signal.hpp>
 
 namespace sak::signal {
 
 // Placeholder for future signal handling utilities.
 
-using Signal1 = sak::Signal< struct test_signal1,false >;
-using Signal2 = sak::Signal< struct test_signal2,false >;
+using Signal1 = sak::Signal< struct test_signal1, false >;
+using Signal2 = sak::Signal< struct test_signal2, false >;
 
 struct Sender : public Signal1 {
   void EmitSignal( ) { NotifyReceivers( Signal1::event{ } ); }
@@ -73,6 +73,49 @@ TEST( SignalTest, MultipleSignals )
   sender.EmitSignal2( );
   EXPECT_EQ( receiver.signal_count1, 1u );
   EXPECT_EQ( receiver.signal_count2, 1u );
+}
+
+template < typename T >
+concept has_method_ScheduleNotifyReceiver = requires( T && t,typename T::event const & a ) {
+    { t.ScheduleNotifyReceivers( a ) };
+  };
+
+TEST( SignalTest, HaveScheduleNotifyReceiver_sync_only )
+{
+
+  using Signal = sak::Signal< struct test_signal_sync, false >;
+
+  struct MySignal : Signal {};
+  auto test_lambda = []( ) {
+    if constexpr ( has_method_ScheduleNotifyReceiver< MySignal > ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  EXPECT_FALSE( test_lambda( ) );
+}
+
+TEST( SignalTest, HaveScheduleNotifyReceiver_async_only )
+{
+  using Signal = sak::Signal< struct test_signal_async, true >;
+
+  struct MySignal : Signal {};
+  auto test_lambda = []( ) {
+    if constexpr ( has_method_ScheduleNotifyReceiver< MySignal > ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  EXPECT_TRUE( test_lambda( ) );
+
+
+  MySignal signal;
+
+  signal.ScheduleNotifyReceivers( Signal::event{ } );
 }
 
 } // namespace sak::signal
