@@ -1,5 +1,7 @@
 #pragma once
 
+#include <sak/TaskScheduler.hpp>
+
 #include <set>
 #include <tuple>
 
@@ -7,7 +9,7 @@ namespace sak {
 
 // Signal handling utilities can be defined here in the future.
 
-template < typename Tag, bool async_support, typename... data >
+template < typename Tag, typename... data >
 class Signal {
 public:
   struct event {
@@ -15,38 +17,52 @@ public:
   };
 
 public:
+  //! IOnterface to matching signal receiver class.
   class Receiver {
   public:
     virtual ~Receiver( );
 
-    void SetSignalHandler( Signal< Tag, async_support, data... > *handler );
+    void SetSignalHandler( sak::Signal< Tag, data... > *handler );
 
   public:
-    virtual void OnSignalReceived( event const &data ) = 0;
+    virtual void
+    OnSignalReceived( sak::Signal< Tag, data... >::event const &data ) = 0;
 
   protected:
-    Signal< Tag, async_support, data... > *handler_ = nullptr;
+    sak::Signal< Tag, data... > *handler_ = nullptr;
   };
+
+public:
+  Signal( ) = default;
 
 protected:
   ~Signal( );
 
 public:
-  void RegisterReceiver( Receiver *receiver );
-  void UnRegisterReceiver( Receiver *receiver );
-  void
-  NotifyReceivers( Signal< Tag, async_support, data... >::event const &data );
+  void RegisterReceiver( sak::Signal< Tag, data... >::Receiver *receiver );
+  void UnRegisterReceiver( sak::Signal< Tag, data... >::Receiver *receiver );
+  void NotifyReceivers( sak::Signal< Tag, data... >::event const &data );
 
-  template < bool async_t = async_support >
-  std::enable_if_t< async_t, void > ScheduleNotifyReceivers(
-    Signal< Tag, async_support, data... >::event const &data );
+protected:
+  void _notify_receiver( sak::Signal< Tag, data... >::event const &data );
 
 private:
-  void
-  _notify_receiver( Signal< Tag, async_support, data... >::event const &data );
+  std::set< sak::Signal< Tag, data... >::Receiver * > receivers_;
+};
+
+//! AsyncSignal
+
+template < typename Tag, typename... data >
+class AsyncSignal : public sak::Signal< Tag, data... > {
+
+public:
+  AsyncSignal( sak::TaskScheduler & );
+
+public:
+  void ScheduleNotifyReceivers( sak::Signal< Tag, data... >::event &&data );
 
 private:
-  std::set< Receiver * > receivers_;
+  sak::TaskScheduler &m_scheduler;
 };
 
 } // namespace sak
@@ -55,8 +71,8 @@ namespace sak {
 
 // Signal implementation
 
-template < typename Tag, bool async_support, typename... data >
-Signal< Tag, async_support, data... >::~Signal( )
+template < typename Tag, typename... data >
+Signal< Tag, data... >::~Signal( )
 {
   for ( auto it = receivers_.begin( ); it != receivers_.end( ); ) {
     ( *it )->SetSignalHandler( nullptr );
@@ -64,17 +80,17 @@ Signal< Tag, async_support, data... >::~Signal( )
   }
 }
 
-template < typename Tag, bool async_support, typename... data >
-void Signal< Tag, async_support, data... >::RegisterReceiver(
-  Receiver *receiver )
+template < typename Tag, typename... data >
+void Signal< Tag, data... >::RegisterReceiver(
+  sak::Signal< Tag, data... >::Receiver *receiver )
 {
   receivers_.insert( receiver );
   receiver->SetSignalHandler( this );
 }
 
-template < typename Tag, bool async_support, typename... data >
-void Signal< Tag, async_support, data... >::UnRegisterReceiver(
-  Receiver *receiver )
+template < typename Tag, typename... data >
+void Signal< Tag, data... >::UnRegisterReceiver(
+  sak::Signal< Tag, data... >::Receiver *receiver )
 {
   auto it = receivers_.find( receiver );
   if ( it != receivers_.end( ) ) {
@@ -82,23 +98,16 @@ void Signal< Tag, async_support, data... >::UnRegisterReceiver(
   }
 }
 
-template < typename Tag, bool async_support, typename... data >
-template < bool async_t >
-std::enable_if_t< async_t, void >
-Signal< Tag, async_support, data... >::ScheduleNotifyReceivers(
-  Signal< Tag, async_support, data... >::event const &data )
-{
-}
-
-template < typename Tag, bool async_support, typename... data >
-void Signal< Tag, async_support, data... >::NotifyReceivers( event const &data )
+template < typename Tag, typename... data >
+void Signal< Tag, data... >::NotifyReceivers(
+  sak::Signal< Tag, data... >::event const &data )
 {
   _notify_receiver( data );
 }
 
-template < typename Tag, bool async_support, typename... data >
-void Signal< Tag, async_support, data... >::_notify_receiver(
-  event const &data )
+template < typename Tag, typename... data >
+void Signal< Tag, data... >::_notify_receiver(
+  sak::Signal< Tag, data... >::event const &data )
 {
   for ( auto *receiver : receivers_ ) {
     receiver->OnSignalReceived( data );
@@ -107,18 +116,35 @@ void Signal< Tag, async_support, data... >::_notify_receiver(
 
 // Receiver implementation
 
-template < typename Tag, bool async_support, typename... data >
-Signal< Tag, async_support, data... >::Receiver::~Receiver( )
+template < typename Tag, typename... data >
+Signal< Tag, data... >::Receiver::~Receiver( )
 {
   if ( handler_ )
     handler_->UnRegisterReceiver( this );
 }
 
-template < typename Tag, bool async_support, typename... data >
-void Signal< Tag, async_support, data... >::Receiver::SetSignalHandler(
-  Signal< Tag, async_support, data... > *handler )
+template < typename Tag, typename... data >
+void Signal< Tag, data... >::Receiver::SetSignalHandler(
+  sak::Signal< Tag, data... > *handler )
 {
   handler_ = handler;
+}
+
+// AsyncSignal implementation
+
+template < typename Tag, typename... data >
+AsyncSignal< Tag, data... >::AsyncSignal( sak::TaskScheduler &scheduler )
+    : m_scheduler( scheduler )
+{
+}
+
+template < typename Tag, typename... data >
+void AsyncSignal< Tag, data... >::ScheduleNotifyReceivers(
+  sak::Signal< Tag, data... >::event &&in_data )
+{
+  m_scheduler.addTask( [ this, data = std::move( in_data ) ]( ) {
+    this->_notify_receiver( data );
+  } );
 }
 
 } // namespace sak

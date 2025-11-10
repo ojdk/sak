@@ -1,13 +1,15 @@
 #include <gtest/gtest.h>
 
+#include "../telemetric/test_mock_TelemetricDevice.hpp"
+
 #include <sak/signal/Signal.hpp>
 
 namespace sak::signal {
 
 // Placeholder for future signal handling utilities.
 
-using Signal1 = sak::Signal< struct test_signal1, false >;
-using Signal2 = sak::Signal< struct test_signal2, false >;
+using Signal1 = sak::Signal< struct test_signal1 >;
+using Signal2 = sak::Signal< struct test_signal2 >;
 
 struct Sender : public Signal1 {
   void EmitSignal( ) { NotifyReceivers( Signal1::event{ } ); }
@@ -75,47 +77,35 @@ TEST( SignalTest, MultipleSignals )
   EXPECT_EQ( receiver.signal_count2, 1u );
 }
 
-template < typename T >
-concept has_method_ScheduleNotifyReceiver = requires( T && t,typename T::event const & a ) {
-    { t.ScheduleNotifyReceivers( a ) };
-  };
+using AsyncSignal1 = sak::AsyncSignal< struct Aync_test_signal1 >;
+using AsyncSignal2 = sak::AsyncSignal< struct Aync_test_signal2 >;
 
-TEST( SignalTest, HaveScheduleNotifyReceiver_sync_only )
+struct AsyncSender1 : public AsyncSignal1 {
+  void EmitSignal( ) { ScheduleNotifyReceivers( AsyncSignal1::event{ } ); }
+};
+
+struct AsyncReceiver1 : AsyncSignal1::Receiver {
+
+  unsigned signal_count = 0;
+  void OnSignalReceived( AsyncSignal1::event const &data ) { ++signal_count; }
+};
+
+TEST( AsyncSignalTest, SignalReceived )
 {
 
-  using Signal = sak::Signal< struct test_signal_sync, false >;
+  sak::test::mock_EnabledTelemetricDevice m_telemetric_device;
+  sak::TaskScheduler scheduler{ m_telemetric_device };
 
-  struct MySignal : Signal {};
-  auto test_lambda = []( ) {
-    if constexpr ( has_method_ScheduleNotifyReceiver< MySignal > ) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
-  EXPECT_FALSE( test_lambda( ) );
-}
-
-TEST( SignalTest, HaveScheduleNotifyReceiver_async_only )
-{
-  using Signal = sak::Signal< struct test_signal_async, true >;
-
-  struct MySignal : Signal {};
-  auto test_lambda = []( ) {
-    if constexpr ( has_method_ScheduleNotifyReceiver< MySignal > ) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
-  EXPECT_TRUE( test_lambda( ) );
+  AsyncSender1 sender{ scheduler };
+  AsyncReceiver1 receiver;
+  sender.RegisterReceiver( &receiver );
+  EXPECT_EQ( receiver.signal_count, 0u );
+  sender.EmitSignal( );
+  EXPECT_EQ( receiver.signal_count, 0u );
+  scheduler.pump( 1 );
+  EXPECT_EQ( receiver.signal_count, 1u );
 
 
-  MySignal signal;
-
-  signal.ScheduleNotifyReceivers( Signal::event{ } );
 }
 
 } // namespace sak::signal
