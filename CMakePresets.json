@@ -44,7 +44,7 @@
         "CMAKE_C_COMPILER": "gcc",
         "CMAKE_C_FLAGS": "-pedantic -Wall",
         "CMAKE_CXX_COMPILER": "g++",
-        "CMAKE_CXX_FLAGS": "",
+        "CMAKE_CXX_FLAGS": "-pedantic -Wall",
         "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/Debug",
         "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
       },
