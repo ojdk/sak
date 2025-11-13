@@ -9,11 +9,11 @@ namespace sak {
 
 // Signal handling utilities can be defined here in the future.
 
-template < typename Tag, typename... data >
+template < typename Tag, typename... Data >
 class Signal {
 public:
   struct event {
-    std::tuple< data... > info;
+    std::tuple< Data... > info;
   };
 
 public:
@@ -22,14 +22,14 @@ public:
   public:
     virtual ~Receiver( );
 
-    void SetSignalHandler( sak::Signal< Tag, data... > *handler );
+    void SetSignalHandler( sak::Signal< Tag, Data... > *handler );
 
   public:
     virtual void
-    OnSignalReceived( sak::Signal< Tag, data... >::event const &data ) = 0;
+    OnSignalReceived( sak::Signal< Tag, Data... >::event const &data ) = 0;
 
   protected:
-    sak::Signal< Tag, data... > *handler_ = nullptr;
+    sak::Signal< Tag, Data... > *handler_ = nullptr;
   };
 
 public:
@@ -39,27 +39,27 @@ protected:
   ~Signal( );
 
 public:
-  void RegisterReceiver( sak::Signal< Tag, data... >::Receiver *receiver );
-  void UnRegisterReceiver( sak::Signal< Tag, data... >::Receiver *receiver );
-  void NotifyReceivers( sak::Signal< Tag, data... >::event const &data );
+  void RegisterReceiver( sak::Signal< Tag, Data... >::Receiver *receiver );
+  void UnRegisterReceiver( sak::Signal< Tag, Data... >::Receiver *receiver );
+  void NotifyReceivers( sak::Signal< Tag, Data... >::event const &data );
 
 protected:
-  void _notify_receiver( sak::Signal< Tag, data... >::event const &data );
+  void _notify_receiver( sak::Signal< Tag, Data... >::event const &data );
 
 private:
-  std::set< sak::Signal< Tag, data... >::Receiver * > receivers_;
+  std::set< sak::Signal< Tag, Data... >::Receiver * > receivers_;
 };
 
 //! AsyncSignal
 
-template < typename Tag, typename... data >
-class AsyncSignal : public sak::Signal< Tag, data... > {
+template < typename Tag, typename... Data >
+class AsyncSignal : public sak::Signal< Tag, Data... > {
 
 public:
   AsyncSignal( sak::TaskScheduler & );
 
 public:
-  void ScheduleNotifyReceivers( sak::Signal< Tag, data... >::event &&data );
+  void ScheduleNotifyReceivers( sak::Signal< Tag, Data... >::event &&data );
 
 private:
   sak::TaskScheduler &m_scheduler;
@@ -71,8 +71,8 @@ namespace sak {
 
 // Signal implementation
 
-template < typename Tag, typename... data >
-Signal< Tag, data... >::~Signal( )
+template < typename Tag, typename... Data >
+Signal< Tag, Data... >::~Signal( )
 {
   for ( auto it = receivers_.begin( ); it != receivers_.end( ); ) {
     ( *it )->SetSignalHandler( nullptr );
@@ -80,17 +80,17 @@ Signal< Tag, data... >::~Signal( )
   }
 }
 
-template < typename Tag, typename... data >
-void Signal< Tag, data... >::RegisterReceiver(
-  sak::Signal< Tag, data... >::Receiver *receiver )
+template < typename Tag, typename... Data >
+void Signal< Tag, Data... >::RegisterReceiver(
+  sak::Signal< Tag, Data... >::Receiver *receiver )
 {
   receivers_.insert( receiver );
   receiver->SetSignalHandler( this );
 }
 
-template < typename Tag, typename... data >
-void Signal< Tag, data... >::UnRegisterReceiver(
-  sak::Signal< Tag, data... >::Receiver *receiver )
+template < typename Tag, typename... Data >
+void Signal< Tag, Data... >::UnRegisterReceiver(
+  sak::Signal< Tag, Data... >::Receiver *receiver )
 {
   auto it = receivers_.find( receiver );
   if ( it != receivers_.end( ) ) {
@@ -98,16 +98,16 @@ void Signal< Tag, data... >::UnRegisterReceiver(
   }
 }
 
-template < typename Tag, typename... data >
-void Signal< Tag, data... >::NotifyReceivers(
-  sak::Signal< Tag, data... >::event const &data )
+template < typename Tag, typename... Data >
+void Signal< Tag, Data... >::NotifyReceivers(
+  sak::Signal< Tag, Data... >::event const &data )
 {
   _notify_receiver( data );
 }
 
-template < typename Tag, typename... data >
-void Signal< Tag, data... >::_notify_receiver(
-  sak::Signal< Tag, data... >::event const &data )
+template < typename Tag, typename... Data >
+void Signal< Tag, Data... >::_notify_receiver(
+  sak::Signal< Tag, Data... >::event const &data )
 {
   for ( auto *receiver : receivers_ ) {
     receiver->OnSignalReceived( data );
@@ -116,31 +116,31 @@ void Signal< Tag, data... >::_notify_receiver(
 
 // Receiver implementation
 
-template < typename Tag, typename... data >
-Signal< Tag, data... >::Receiver::~Receiver( )
+template < typename Tag, typename... Data >
+Signal< Tag, Data... >::Receiver::~Receiver( )
 {
   if ( handler_ )
     handler_->UnRegisterReceiver( this );
 }
 
-template < typename Tag, typename... data >
-void Signal< Tag, data... >::Receiver::SetSignalHandler(
-  sak::Signal< Tag, data... > *handler )
+template < typename Tag, typename... Data >
+void Signal< Tag, Data... >::Receiver::SetSignalHandler(
+  sak::Signal< Tag, Data... > *handler )
 {
   handler_ = handler;
 }
 
 // AsyncSignal implementation
 
-template < typename Tag, typename... data >
-AsyncSignal< Tag, data... >::AsyncSignal( sak::TaskScheduler &scheduler )
+template < typename Tag, typename... Data >
+AsyncSignal< Tag, Data... >::AsyncSignal( sak::TaskScheduler &scheduler )
     : m_scheduler( scheduler )
 {
 }
 
-template < typename Tag, typename... data >
-void AsyncSignal< Tag, data... >::ScheduleNotifyReceivers(
-  sak::Signal< Tag, data... >::event &&in_data )
+template < typename Tag, typename... Data >
+void AsyncSignal< Tag, Data... >::ScheduleNotifyReceivers(
+  sak::Signal< Tag, Data... >::event &&in_data )
 {
   m_scheduler.addTask( [ this, data = std::move( in_data ) ]( ) {
     this->_notify_receiver( data );
