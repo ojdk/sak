@@ -2,7 +2,7 @@
 
 #include "../telemetric/test_mock_TelemetricDevice.hpp"
 
-#include <sak/signal/Signal.hpp>
+#include <sak/signal/signal.hpp>
 
 namespace sak::signal {
 

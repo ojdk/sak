@@ -45,6 +45,45 @@
         "CMAKE_C_FLAGS": "-DWINDOWS",
         "CMAKE_CXX_FLAGS": "-DWINDOWS"
       }
+    },
+    {
+      "name": "debug-linux",
+      "displayName": "debug on wsl",
+      "description": "Configure for debug build using vcpkg and Ubuntu / g++  (x64)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_C_COMPILER": "gcc",
+        "CMAKE_C_FLAGS": "-pedantic -Wall",
+        "CMAKE_CXX_COMPILER": "g++",
+        "CMAKE_CXX_FLAGS": "-pedantic -Wall",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/Debug",
+        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+      },
+      "environment": {
+        "VCPKG_ROOT": "~/.vcpkg"
+
+      }
+    },
+    {
+      "name": "debug-linux-clang",
+      "displayName": "debug on wsl clang",
+      "description": "Configure for debug build using vcpkg and Ubuntu / Clang  (x64)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_C_FLAGS": "-pedantic -Wall",
+        "CMAKE_CXX_COMPILER": "clang++",
+        "CMAKE_CXX_FLAGS": "-pedantic -Wall",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
+        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+      },
+      "environment": {
+        "VCPKG_ROOT": "~/.vcpkg"
+      }
     }
   ],
   "buildPresets": [

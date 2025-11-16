@@ -17,7 +17,7 @@ set(SOURCES
   
   ${SOURCE_DIR}/src/json/json.cpp
   ${SOURCE_DIR}/src/json/json_impl.cpp
-  ${SOURCE_DIR}/src/json/LohmannJsonVAlidater.cpp
+  ${SOURCE_DIR}/src/json/LohmannJsonValidater.cpp
   
   ${SOURCE_DIR}/src/telemetric/TelemetricExecutionTimeLimit.cpp
   
