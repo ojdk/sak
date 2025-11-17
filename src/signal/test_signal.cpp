@@ -4,6 +4,8 @@
 
 #include <sak/signal/signal.hpp>
 
+#include <string>
+
 namespace sak::signal {
 
 // Placeholder for future signal handling utilities.
@@ -104,8 +106,126 @@ TEST( AsyncSignalTest, SignalReceived )
   EXPECT_EQ( receiver.signal_count, 0u );
   scheduler.pump( 1 );
   EXPECT_EQ( receiver.signal_count, 1u );
+}
 
+TEST( SignalTest, data_by_value )
+{
+  using DataSignal = sak::Signal< struct IntValueSignal, int >;
 
+  struct Sender : DataSignal {
+    void EmitSignal( int value )
+    {
+      NotifyReceivers( DataSignal::event{ value } );
+    }
+  };
+
+  struct Receiver : DataSignal::Receiver {
+    int received_value = 0;
+    void OnSignalReceived( DataSignal::event const &data )
+    {
+      received_value = data.get< 0 >( );
+    }
+  };
+
+  Sender sender;
+  Receiver receiver;
+
+  sender.RegisterReceiver( &receiver );
+  EXPECT_EQ( receiver.received_value, 0 );
+  sender.EmitSignal( 42 );
+  EXPECT_EQ( receiver.received_value, 42 );
+
+  sender.EmitSignal( 41 );
+  EXPECT_EQ( receiver.received_value, 41 );
+}
+
+TEST( SignalTest, data_by_reference )
+{
+  using DataSignal = sak::Signal< struct IntValueSignal, int const & >;
+
+  struct Sender : DataSignal {
+    void EmitSignal( int const &value )
+    {
+      NotifyReceivers( DataSignal::event{ value } );
+    }
+  };
+
+  struct Receiver : DataSignal::Receiver {
+
+    Receiver( int &rv )
+        : received_value( rv )
+    {
+    }
+
+    int &received_value;
+    void OnSignalReceived( DataSignal::event const &data )
+    {
+      received_value = data.get< 0 >( );
+    }
+  };
+
+  int watched_value = 0;
+
+  Sender sender;
+  Receiver receiver{ watched_value };
+
+  int value = 0;
+
+  sender.RegisterReceiver( &receiver );
+  EXPECT_EQ( receiver.received_value, 0 );
+  value = 42;
+  sender.EmitSignal( value );
+  EXPECT_EQ( receiver.received_value, 42 );
+
+  value = 41;
+  EXPECT_EQ( receiver.received_value, 42 );
+  sender.EmitSignal( value );
+  EXPECT_EQ( receiver.received_value, 41 );
+}
+
+TEST( SignalTest, data_2 )
+{
+  using DataSignal = sak::Signal< struct IntValueSignal, int, std::string >;
+
+  struct Sender : DataSignal {
+    void EmitSignal( int const &value, std::string const &value2 )
+    {
+      NotifyReceivers( DataSignal::event{ value, value2 } );
+    }
+  };
+
+  struct Receiver : DataSignal::Receiver {
+
+    int received_value1 = 0;
+    std::string received_value2 = "";
+    void OnSignalReceived( DataSignal::event const &data )
+    {
+      received_value1 = data.get< 0 >( );
+      received_value2 = data.get< 1 >( );
+    }
+  };
+
+  Sender sender;
+  Receiver receiver;
+
+  int value1 = 0;
+  std::string value2 = "";
+
+  sender.RegisterReceiver( &receiver );
+  EXPECT_EQ( receiver.received_value1, 0 );
+  EXPECT_EQ( receiver.received_value2, "" );
+  value1 = 42;
+  value2 = "Hello World";
+
+  sender.EmitSignal( value1, value2 );
+  EXPECT_EQ( receiver.received_value1, 42 );
+  EXPECT_EQ( receiver.received_value2, "Hello World" );
+
+  value1 = 41;
+  value2 = "Goodby World";
+  sender.EmitSignal( value1, value2 );
+  EXPECT_EQ( receiver.received_value1, 41 );
+  EXPECT_EQ( receiver.received_value2, "Goodby World" );
 }
 
 } // namespace sak::signal

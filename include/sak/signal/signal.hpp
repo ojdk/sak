@@ -12,7 +12,21 @@ namespace sak {
 template < typename Tag, typename... Data >
 class Signal {
 public:
-  struct event {
+  class event {
+  public:
+
+    event( Data... args )
+        : info( std::make_tuple( args... ) )
+    {
+    }
+
+    template < size_t index >
+    constexpr decltype(auto) get( ) const 
+    {
+      return std::get< index >( info );
+    }
+
+  private:
     std::tuple< Data... > info;
   };
 
